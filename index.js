@@ -45,6 +45,7 @@ app.get('/', (req, res) => {
       { '/api/item/id/_id - delete': 'delete all received order list' },
       { '/api/item/order_id - delete': 'delete all received order list' },
     ],
+    [{ '/api/status': 'gets order by status' }],
   ]);
 });
 app.get('/api/item', (req, res) => {
@@ -145,6 +146,17 @@ app.delete('/api/item/:id', async (req, res) => {
     res.status(400).send(e);
   }
 });
+
+app.get('/api/:statu', async (req, res) => {
+  try {
+    status = req.params.statu;
+    const getById = await Order.find({ status: status });
+    res.send(getById);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
 server.listen(PORT, () => {
   console.log(`site is live on http://localhost:${PORT}`);
 });
