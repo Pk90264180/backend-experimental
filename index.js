@@ -43,6 +43,7 @@ app.post('/api/item', async (req, res) => {
   const {
     order_id,
     mobile,
+    status,
     order_items,
     online_service_charge,
     total_quantity,
@@ -56,6 +57,7 @@ app.post('/api/item', async (req, res) => {
     const order = new Order({
       order_id: order_id,
       mobile: mobile,
+      status: 'placed',
       order_items: order_items,
       online_service_charge: online_service_charge,
       total_quantity: total_quantity,
