@@ -28,7 +28,24 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('this is homepage.................');
+  res.send([
+    [
+      { '/api/item - get': 'get all received order list' },
+      { '/api/item - post': 'post all received order list' },
+    ],
+    [
+      { '/api/item/order_id - get': 'get all received order list' },
+      { '/api/item/order_id - patch': 'patch all received order list' },
+    ],
+    [
+      { '/api/item/id/_id - get': 'get all received order list' },
+      { '/api/item/id/_id - patch': 'patch all received order list' },
+    ],
+    [
+      { '/api/item/id/_id - delete': 'delete all received order list' },
+      { '/api/item/order_id - delete': 'delete all received order list' },
+    ],
+  ]);
 });
 app.get('/api/item', (req, res) => {
   db.collection('orders')
@@ -70,7 +87,64 @@ app.post('/api/item', async (req, res) => {
     console.log(err);
   }
 });
-
+app.get('/api/item/:id', async (req, res) => {
+  try {
+    const order_id = req.params.id;
+    const getById = await Order.findOne({ order_id: order_id });
+    res.send(getById);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+app.get('/api/item/id/:id', async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const getById = await Order.findById({ _id });
+    res.send(getById);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+app.patch('/api/item/:id', async (req, res) => {
+  try {
+    order_id = req.params.id;
+    const getById = await Order.findOneAndUpdate({ order_id }, req.body, {
+      new: true,
+    });
+    res.send(getById);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+app.patch('/api/item/id/:id', async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const getById = await Order.findByIdAndUpdate({ _id }, req.body, {
+      new: true,
+    });
+    res.send(getById);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+app.delete('/api/item/id/:id', async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const getById = await Order.findByIdAndDelete(req.params.id);
+    res.send(getById);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+app.delete('/api/item/:id', async (req, res) => {
+  try {
+    order_id = req.params.id;
+    const getById = await Order.findOneAndDelete(req.params.id);
+    res.send(getById);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 server.listen(PORT, () => {
   console.log(`site is live on http://localhost:${PORT}`);
 });
