@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.send('this is homepage')
 });
 app.get('/api/item', (req, res) => {
   db.collection('orders')
