@@ -156,6 +156,17 @@ app.get('/api/:statu', async (req, res) => {
     res.status(400).send(e);
   }
 });
+app.patch('/api/placed/:id', async (req, res) => {
+  try {
+    order_id = req.params.id;
+    const getById = await Order.findOneAndUpdate({ order_id }, req.body, {
+      new: true,
+    });
+    res.send(getById);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 
 server.listen(PORT, () => {
   console.log(`site is live on http://localhost:${PORT}`);
