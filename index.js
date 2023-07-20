@@ -21,8 +21,8 @@ const io = new Server(server, {
 });
 io.on('connection', (socket) => {
   socket.on('send_message', (data) => {
-    console.log(data.message);
-    const chat = data.message;
+    console.log(data);
+    const chat = data;
     io.emit('send_message', chat);
   });
 });
@@ -30,25 +30,25 @@ io.on('connection', (socket) => {
 app.get('/', (req, res) => {
   res.send([
     [
-      { '/api/item - get': 'get all received order list' },
-      { '/api/item - post': 'post all received order list' },
+      { '/api/v2/item - get': 'get all received order list' },
+      { '/api/v2/item - post': 'post all received order list' },
     ],
     [
-      { '/api/item/order_id - get': 'get all received order list' },
-      { '/api/item/order_id - patch': 'patch all received order list' },
+      { '/api/v2/item/order_id - get': 'get all received order list' },
+      { '/api/v2/item/order_id - patch': 'patch all received order list' },
     ],
     [
-      { '/api/item/id/_id - get': 'get all received order list' },
-      { '/api/item/id/_id - patch': 'patch all received order list' },
+      { '/api/v2/item/id/_id - get': 'get all received order list' },
+      { '/api/v2/item/id/_id - patch': 'patch all received order list' },
     ],
     [
-      { '/api/item/id/_id - delete': 'delete all received order list' },
-      { '/api/item/order_id - delete': 'delete all received order list' },
+      { '/api/v2/item/id/_id - delete': 'delete all received order list' },
+      { '/api/v2/item/order_id - delete': 'delete all received order list' },
     ],
-    [{ '/api/status': 'gets order by status' }],
+    [{ '/api/v2/status': 'gets order by status' }],
   ]);
 });
-app.get('/api/item', (req, res) => {
+app.get('/api/v2/item', (req, res) => {
   db.collection('orders')
     .find()
     .toArray(function (err, docs) {
@@ -57,7 +57,7 @@ app.get('/api/item', (req, res) => {
       res.send(docs);
     });
 });
-app.post('/api/item', async (req, res) => {
+app.post('/api/v2/item', async (req, res) => {
   const {
     order_id,
     mobile,
@@ -88,7 +88,7 @@ app.post('/api/item', async (req, res) => {
     console.log(err);
   }
 });
-app.get('/api/item/:id', async (req, res) => {
+app.get('/api/v2/item/:id', async (req, res) => {
   try {
     const order_id = req.params.id;
     const getById = await Order.findOne({ order_id: order_id });
@@ -97,7 +97,7 @@ app.get('/api/item/:id', async (req, res) => {
     res.status(400).send(e);
   }
 });
-app.get('/api/item/id/:id', async (req, res) => {
+app.get('/api/v2/item/id/:id', async (req, res) => {
   try {
     const _id = req.params.id;
     const getById = await Order.findById({ _id });
@@ -106,7 +106,7 @@ app.get('/api/item/id/:id', async (req, res) => {
     res.status(400).send(e);
   }
 });
-app.patch('/api/item/:id', async (req, res) => {
+app.patch('/api/v2/item/:id', async (req, res) => {
   try {
     order_id = req.params.id;
     const getById = await Order.findOneAndUpdate({ order_id }, req.body, {
@@ -117,7 +117,7 @@ app.patch('/api/item/:id', async (req, res) => {
     res.status(400).send(e);
   }
 });
-app.patch('/api/item/id/:id', async (req, res) => {
+app.patch('/api/v2/item/id/:id', async (req, res) => {
   try {
     const _id = req.params.id;
     const getById = await Order.findByIdAndUpdate({ _id }, req.body, {
@@ -128,7 +128,7 @@ app.patch('/api/item/id/:id', async (req, res) => {
     res.status(400).send(e);
   }
 });
-app.delete('/api/item/id/:id', async (req, res) => {
+app.delete('/api/v2/item/id/:id', async (req, res) => {
   try {
     const _id = req.params.id;
     const getById = await Order.findByIdAndDelete(req.params.id);
@@ -137,7 +137,7 @@ app.delete('/api/item/id/:id', async (req, res) => {
     res.status(400).send(e);
   }
 });
-app.delete('/api/item/:id', async (req, res) => {
+app.delete('/api/v2/item/:id', async (req, res) => {
   try {
     order_id = req.params.id;
     const getById = await Order.findOneAndDelete(req.params.id);
@@ -147,7 +147,7 @@ app.delete('/api/item/:id', async (req, res) => {
   }
 });
 
-app.get('/api/:statu', async (req, res) => {
+app.get('/api/v2/:statu', async (req, res) => {
   try {
     status = req.params.statu;
     const getById = await Order.find({ status: status });
@@ -156,7 +156,7 @@ app.get('/api/:statu', async (req, res) => {
     res.status(400).send(e);
   }
 });
-app.patch('/api/placed/:id', async (req, res) => {
+app.patch('/api/v2/placed/:id', async (req, res) => {
   try {
     order_id = req.params.id;
     const getById = await Order.findOneAndUpdate({ order_id }, req.body, {
